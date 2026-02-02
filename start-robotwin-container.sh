@@ -44,11 +44,13 @@ else
         -e DISPLAY=$DISPLAY \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -v "$(pwd):/app/workspace/Robotwin" \
-        -v /usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d \
-        -v /etc/vulkan/icd.d:/etc/vulkan/icd.d \
+        -v /usr/share/vulkan/icd.d:/usr/share/vulkan/icd.d:ro \
+        -v /etc/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:ro \
+        -v /usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d:ro \
         -e http_proxy="$PROXY_URL" \
         -e https_proxy="$PROXY_URL" \
         -e no_proxy="localhost,127.0.0.1" \
         -e NVIDIA_DRIVER_CAPABILITIES=all \
+        -e NVIDIA_VISIBLE_DEVICES=all \
         $IMAGE_NAME
 fi
