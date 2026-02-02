@@ -16,7 +16,11 @@ class catch_bottle_and_shake(Base_Task):
         super()._init_task_env_(**kwags)
 
         self.info["info"] = {
-            "task": "catch_bottle_and_shake"
+            "task": "catch_bottle_and_shake",
+            "{A}": "bottle",
+            "{B}": "table",
+            "{a}": "left arm",
+            "{b}": "right arm"
         }
 
     def load_actors(self):
