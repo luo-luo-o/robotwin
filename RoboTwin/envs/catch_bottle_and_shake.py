@@ -16,7 +16,7 @@ class catch_bottle_and_shake(Base_Task):
         super()._init_task_env_(**kwags)
 
         self.info["info"] = {
-            
+            "task": "catch_bottle_and_shake"
         }
 
     def load_actors(self):
@@ -24,7 +24,7 @@ class catch_bottle_and_shake(Base_Task):
 
         # the location of the bottle
         self.config_bottle = {
-            "pos": [0.0, 0.0, 0.77],
+            "pos": [0.15, 0.0, 0.79],
             "quat": [0.707, 0.707, 0, 0] # 指向上方
         }
 
@@ -51,16 +51,20 @@ class catch_bottle_and_shake(Base_Task):
 
         # step 1: 抓取瓶子
         flushed_print("步骤 1: 抓取瓶子")
+
+        start_p = self.bottle.get_pose().p
         self.move(self.grasp_actor(self.bottle, arm_tag=arm_R, pre_grasp_dis=0.15))
         self.move(self.move_by_displacement(arm_R, z=0.1))
+        end_p = self.bottle.get_pose().p
 
-        flushed_print(f"DEBUG: 初始高度 {self.config_bottle['pos'][2]:.4f}")
-        flushed_print(f"DEBUG: 判定阈值 {self.config_bottle['pos'][2] + 0.06:.4f}")
+        flushed_print(f"DEBUG: 初始高度 {start_p[2]:.4f}")
+        flushed_print(f"DEBUG: 判定阈值 {(start_p[2] + 0.08):.4f}")
         flushed_print(f"DEBUG: 当前检测高度 {self.bottle.get_pose().p[2]:.4f}")
 
-        if self.bottle.get_pose().p[2] > self.config_bottle["pos"][2] + 0.06:
-            self.catch_success = True
+        move_z = np.linalg.norm(np.array(end_p[2]) - np.array(start_p[2]))
+        if move_z > 0.08:
             flushed_print("✓ 瓶子抓取成功。")
+            self.catch_success = True
         else:
             flushed_print("✗ 瓶子抓取失败。")
 
@@ -108,6 +112,8 @@ class catch_bottle_and_shake(Base_Task):
         
         # move the arm back
         # self.move(self.back_to_origin(arm_R))
+
+        return self.info
 
     def check_success(self):
         overall_success = False
