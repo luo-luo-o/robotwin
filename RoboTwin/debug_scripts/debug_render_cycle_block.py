@@ -56,7 +56,7 @@ def main():
              "wrist_camera_type": "D435",
              "collect_wrist_camera": True
         },
-        "render_freq": 1,
+        "render_freq": 10,
         "random_block_order": args.random  # 使用命令行参数
     }
 

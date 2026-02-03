@@ -33,7 +33,9 @@ class cycle_block(Base_Task):
             "random_block_order": self.random_block_order,
             "A": "pad 0",
             "B": "pad 1",
-            "C": "pad 2"
+            "C": "pad 2",
+            "a": "red block",
+            "b": "green block"
         }
 
         if hasattr(self, 'generated_blocks'):
@@ -53,9 +55,9 @@ class cycle_block(Base_Task):
         pad_z = base_table_height + 0.001
 
         self.pad_poses = [
-            [0.0, 0.057, pad_z],    # pad 0
-            [-0.07, -0.05, pad_z],    # pad 1
-            [0.07, -0.05, pad_z]      # pad 2
+            [0.0, -0.050, pad_z],    # pad 0
+            [-0.07, -0.15, pad_z],    # pad 1
+            [0.07, -0.15, pad_z]      # pad 2
         ]
         self.pads = []
 
@@ -75,9 +77,9 @@ class cycle_block(Base_Task):
         block_size = 0.02
         block_z = base_table_height + block_size
         block_positions = [
-            ([0.0, 0.057, block_z], "block0"),
-            ([-0.07, -0.05, block_z], "block1"),
-            ([0.07, -0.05, block_z], "block2")
+            ([0.0, -0.050, block_z], "block0"),
+            ([-0.07, -0.15, block_z], "block1"),
+            ([0.07, -0.15, block_z], "block2")
         ]
 
         # 根据 Episode 编号或随机性决定生成的方块
@@ -130,29 +132,37 @@ class cycle_block(Base_Task):
         change_arm = False
 
         # 0 -> 1: arm_L
-        # 1 -> 2: arm_L
+        # 1 -> 2: nochange but default arm_L
         # 2 -> 0: arm_R
+        self.arm_before = None
+        arm_use = None
         for i in range(2):
             # # step1: reset some signals
             self.success_catch_times = 0
             self.success_place_times = 0
-            self.arm_before = None
-            arm_use = None
+            
 
             pre_grasp_dis = 0.1
-            grasp_dis=0.02
+            grasp_dis=0.03
             MOVE_UP_AFTER_GRASP = 0.05
+            robot_quat = [0.5, -0.5, 0.5, 0.5]
 
             for j in range(3):
                 # catch first block
                 first_block, pos_id = self.blocks[f"block{self.selected_indices[1]}"]
                 self.arm_before = arm_use
-                arm_use = arm_L if pos_id != 2 else arm_R
+                if pos_id == 0:
+                    arm_use = arm_L
+                elif pos_id == 1:
+                    arm_use = self.arm_before if self.arm_before is not None else arm_L
+                else:
+                    arm_use = arm_R
                 if self.arm_before is not None and self.arm_before != arm_use:
                     change_arm = True
                 start_block_pos = first_block.get_pose().p
                 self.move(self.grasp_actor(first_block, arm_tag=arm_use, pre_grasp_dis=pre_grasp_dis, grasp_dis=grasp_dis),
                           self.back_to_origin(self.arm_before) if change_arm else None)
+                change_arm = False
                 self.move(self.move_by_displacement(arm_use, z=MOVE_UP_AFTER_GRASP))
                 end_block_pos = first_block.get_pose().p
                 # check catch success
@@ -170,10 +180,11 @@ class cycle_block(Base_Task):
                 target_pos_pre = self.pad_poses[self.empty_pad].copy()
                 target_pos_pre[2] += 0.2
                 flushed_print(f"DEBUG: 第 {i+1} 轮第 1 个方块第 {j+1} 次 放置 目标位置: {target_pos_pre}")
-                current_pose = self.get_arm_pose(arm_use) # 获取当前手臂末端位姿
-                self.move(self.move_to_pose(arm_use, sapien.Pose(target_pos_pre, current_pose[3:])))
-                self.move(self.move_by_displacement(arm_use, z=-0.15))
+                self.move(self.move_to_pose(arm_use, sapien.Pose(target_pos_pre, robot_quat)))
+
+                self.move(self.move_by_displacement(arm_use, z=-0.16))
                 self.move(self.open_gripper(arm_use))
+                self.move(self.move_by_displacement(arm_use, z=MOVE_UP_AFTER_GRASP))
                 # check place success
                 block_p = first_block.get_pose().p
                 if np.linalg.norm(block_p[:2] - self.pad_poses[self.empty_pad][:2]) < 0.03:
@@ -187,12 +198,18 @@ class cycle_block(Base_Task):
                 # catch second block
                 second_block, pos_id = self.blocks[f"block{self.selected_indices[0]}"]
                 self.arm_before = arm_use
-                arm_use = arm_L if pos_id != 2 else arm_R
+                if pos_id == 0:
+                    arm_use = arm_L
+                elif pos_id == 1:
+                    arm_use = self.arm_before if self.arm_before is not None else arm_L
+                else:
+                    arm_use = arm_R
                 if self.arm_before is not None and self.arm_before != arm_use:
                     change_arm = True
                 start_block_pos = second_block.get_pose().p
                 self.move(self.grasp_actor(second_block, arm_tag=arm_use, pre_grasp_dis=pre_grasp_dis),
                           self.back_to_origin(self.arm_before) if change_arm else None)
+                change_arm = False
                 self.move(self.move_by_displacement(arm_use, z=MOVE_UP_AFTER_GRASP))
                 end_block_pos = second_block.get_pose().p
                 # check catch success
@@ -210,10 +227,10 @@ class cycle_block(Base_Task):
                 target_pos_pre = self.pad_poses[self.empty_pad].copy()
                 target_pos_pre[2] += 0.2
                 flushed_print(f"DEBUG: 第 {i+1} 轮第 2 个方块第 {j+1} 次 放置 目标位置: {target_pos_pre}")
-                current_pose = self.get_arm_pose(arm_use) # 获取当前手臂末端位姿
-                self.move(self.move_to_pose(arm_use, sapien.Pose(target_pos_pre, current_pose[3:])))
-                self.move(self.move_by_displacement(arm_use, z=-0.15))
+                self.move(self.move_to_pose(arm_use, sapien.Pose(target_pos_pre, robot_quat)))
+                self.move(self.move_by_displacement(arm_use, z=-0.16))
                 self.move(self.open_gripper(arm_use))
+                self.move(self.move_by_displacement(arm_use, z=MOVE_UP_AFTER_GRASP))
                 block_p = second_block.get_pose().p
                 if np.linalg.norm(block_p[:2] - self.pad_poses[self.empty_pad][:2]) < 0.03:
                     self.success_place_times += 1
@@ -227,7 +244,7 @@ class cycle_block(Base_Task):
 
         return self.info
 
-    def get_success(self):
+    def check_success(self):
         if self.success_cycle_times == 2:
             flushed_print("✓ 两轮循环成功完成")
             return True

@@ -1,0 +1,34 @@
+{
+    "full_description": "Starting from blocks on {A} and {B}, cycle them through the empty pad {C} sequentially.",
+    "schema": "{A} notifies pad 0, {B} notifies pad 1, {C} notifies pad 2, {a} notifies the left arm, {b} notifies the right arm",
+    "preference": "num of words should not exceed 15. Degree of detail avg is six.",
+    "seen": [
+        "Move blocks from {A} and {B} to the empty pad {C} in sequence.",
+        "Cycle blocks starting on {A} and {B} through {C} using both arms.",
+        "Shift blocks from {A} and {B} into the vacant pad {C} repeatedly.",
+        "Use {a} and {b} to move blocks from {A} and {B} to {C}.",
+        "Beginning at {A} and {B}, rotate blocks to the free pad {C}.",
+        "Pick blocks from {A} and {B} to fill the empty spot {C}.",
+        "Transfer blocks initially on {A} and {B} to the unoccupied pad {C}.",
+        "Relocate blocks from {A} and {B} to {C} to start the cycle.",
+        "Start with blocks at {A} and {B}, then move them to {C}.",
+        "Use {a} or {b} to cycle blocks from {A} and {B} via {C}.",
+        "Shift the block on {B} to {C}, then move from {A} accordingly.",
+        "Execute a circular move for blocks on {A} and {B} using {C}.",
+        "Rotate blocks from their initial pads {A} and {B} through pad {C}.",
+        "Sequentially transfer blocks from {A} and {B} to the next empty pad.",
+        "Move blocks from {A} and {B} to the available spot {C} continuously.",
+        "Cycle blocks by moving them from {A} and {B} to the vacancy.",
+        "Relocate the blocks on {A} and {B} to the unoccupied pad {C}.",
+        "Begin the rotation of blocks from {A} and {B} to pad {C}.",
+        "Use {a} and {b} to shift blocks from {A} and {B} to {C}.",
+        "Starting at pads {A} and {B}, move blocks to the empty {C}."
+    ],
+    "unseen": [
+        "Cycle blocks from {A} and {B} into the empty pad {C} to finish.",
+        "Move blocks through pads {A}, {B}, and {C} starting from the first two.",
+        "Shift blocks from {A} and {B} to the vacant {C} in a loop.",
+        "Transfer blocks from their starting pads {A} and {B} to empty spots.",
+        "Rotate blocks from {A} and {B} to the next available pad location."
+    ]
+}
