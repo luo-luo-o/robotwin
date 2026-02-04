@@ -26,7 +26,9 @@ class ring_bell_rhythm(Base_Task):
         flushed_print("正在加载资产...")
         base_table_height = 0.74
 
-        self.DELAY_BASE_TIME = 50
+        # ----- delay_time (can be change) ----
+        self.DELAY_BASE_TIME = 20
+        # -------------------------------------
 
         # load bell
         self.config_bell = {
@@ -73,21 +75,23 @@ class ring_bell_rhythm(Base_Task):
         # stage 1: 短按
         flushed_print("阶段 1: 短按铃铛")
         self.move(self.move_by_displacement(arm_R, z=-move_down_distance))
-        self.delay(self.DELAY_BASE_TIME)
+        # flushed_print(f"DEBUG: time delay before: {time.perf_counter()}")
+        self.delay(int(self.DELAY_BASE_TIME))
+        # flushed_print(f"DEBUG: time delay after: {time.perf_counter()}")
         self.move(self.move_by_displacement(arm_R, z=move_down_distance))
         self.stage1_success = True
 
         # stage 2: 长按
         flushed_print("阶段 2: 长按铃铛")
         self.move(self.move_by_displacement(arm_R, z=-move_down_distance))
-        self.delay(self.DELAY_BASE_TIME * 2.5)
+        self.delay(int(self.DELAY_BASE_TIME * 2.5))
         self.move(self.move_by_displacement(arm_R, z=move_down_distance))
         self.stage2_success = True
 
         # stage 3: 短按
         flushed_print("阶段 3: 短按铃铛")
         self.move(self.move_by_displacement(arm_R, z=-move_down_distance))
-        self.delay(self.DELAY_BASE_TIME)
+        self.delay(int(self.DELAY_BASE_TIME))
         self.move(self.move_by_displacement(arm_R, z=move_down_distance))
         self.stage3_success = True
 
