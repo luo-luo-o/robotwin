@@ -1,34 +1,33 @@
 {
-    "full_description": "Use the right arm to grasp the bottle {A} from the table {B}, lift it, and perform three vertical shakes.",
-    "schema": "{A} notifies the bottle, {B} notifies the table, {a} notifies the left arm, {b} notifies the right arm",
-    "preference": "No adjectives at the end. Max 15 words. Include {A} and {B} in all. Include {b} in exactly 50% of instructions.",
-    "seen": [
-        "Use {b} to lift {A} from {B} and shake it three times.",
-        "Grasp {A} from {B} and perform three vertical shakes.",
-        "Catch {A} on {B} using {b} and shake it thrice.",
-        "Lift {A} from {B} and execute three shake cycles.",
-        "Pick up {A} from {B} with {b} and shake it three times.",
-        "Shake {A} thrice after lifting it from the table {B}.",
-        "Hold {A} from {B} with {b} and perform three shakes.",
-        "Take {A} from {B} and shake it three times vertically.",
-        "Use {b} to grab {A} from {B} and shake it thrice.",
-        "Perform three shakes after picking up {A} from {B}.",
-        "Lift {A} from {B} using {b} and shake it three times.",
-        "Grab {A} from {B} and complete three vertical shake motions.",
-        "Use {b} to lift {A} from {B} then shake it thrice.",
-        "Lift {A} off {B} and shake it three times.",
-        "Employ {b} to catch {A} from {B} and shake it thrice.",
-        "Shake {A} three times after grasping it from {B}.",
-        "Pick up {A} from {B} with {b} then shake it three times.",
-        "Lift and shake {A} from {B} three times.",
-        "Grasp {A} on {B} with {b} and perform three shakes.",
-        "Execute three shakes once {A} is lifted from {B}."
-    ],
-    "unseen": [
-        "Use {b} to lift {A} from {B} and shake it thrice.",
-        "Perform three vertical shakes with {A} from {B}.",
-        "Catch {A} on {B} with {b} and shake it three times.",
-        "Shake {A} from {B} three times to complete the cycle.",
-        "Lift {A} from {B} using {b} and shake it three times."
-    ]
+  "full_description": "Use the right arm to press the bell in a rhythmic pattern of short-long-short clicks. The arm must lower to contact the bell, perform a brief press, then a sustained hold, and finally another brief press.",
+  "schema": "{A} notifies the bell, {a} notifies the right arm",
+  "preference": "No adjectives at the end. Max 15 words. Use {A} for bell. Include {a} for arm in exactly 50% of instructions. Use verbs like press, hold, and tap.",
+  "seen": [
+    "Use {a} to click {A} following a short-long-short rhythmic pattern.",
+    "Press {A} in a rhythmic pattern of short-long-short clicks.",
+    "Direct {a} to press {A} briefly, then hold, then tap again.",
+    "Follow the rhythm to click {A} briefly, hold, then tap.",
+    "Make {a} ring {A} twice quickly with one long press between.",
+    "Complete the sequence on {A} with two quick and one long press.",
+    "Command {a} to execute the rhythmic clicks on {A} as shown.",
+    "Trigger {A} twice with a brief touch and once with a hold.",
+    "Control {a} to hit {A} in a short-long-short rhythmic pattern.",
+    "Tap {A} using the specific short-long-short rhythmic timing.",
+    "Let {a} finish the rhythmic task by pressing {A} three times.",
+    "Perform three rhythmic presses on {A} to finish the cycle.",
+    "Direct {a} to tap {A}, hold the position, and tap again.",
+    "Execute a sequence of short, long, and short presses on {A}.",
+    "Use {a} to ring {A} by alternating quick and sustained pressure.",
+    "Ring {A} by alternating between quick taps and a sustained press.",
+    "Employ {a} to complete the short-long-short sequence on {A}.",
+    "Follow the timing to strike {A} with varying press durations.",
+    "Sequence {a} to press {A} once briefly, once long, then once briefly.",
+    "Apply one brief, one long, and one final brief press to {A}."
+  ],
+  "unseen": [
+    "Use {a} to rotate through short and long presses on {A}.",
+    "Finish the rhythmic pattern on {A} for one full cycle.",
+    "Direct {a} to follow the rhythmic press intervals on {A}.",
+    "Complete the three-step rhythmic press on {A} for success."
+  ]
 }
