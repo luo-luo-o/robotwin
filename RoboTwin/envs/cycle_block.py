@@ -12,35 +12,19 @@ def flushed_print(*args, **kwargs):
 
 class cycle_block(Base_Task):
     def setup_demo(self, **kwags):
-        """
-        介绍参数
-        
-        :param kwags: 
-            --Episode
-                0: block 2 on pad 0, block 3 on pad 1
-                1: block 2 on pad 1, block 3 on pad 2
-                2: block 2 on pad 2, block 3 on pad 0
-                3: cycle back to episode 0
-                ...
-            --random_block_order: bool, 是否随机生成方块位置
-        """
-        self.random_block_order = kwags.get("random_block_order", False)
-
         super()._init_task_env_(**kwags)
 
         self.info["info"] = {
             "task": "cycle_block",
-            "random_block_order": self.random_block_order,
             "{A}": "pad0",
             "{B}": "pad1",
             "{C}": "pad2",
+            "{D}": "red block",
+            "{E}": "green block",
             "{a}": "left",
             "{b}": "right",
         }
 
-        if hasattr(self, 'generated_blocks'):
-            self.info["info"]["generated_blocks"] = self.generated_blocks
-            self.info["info"]["num_blocks"] = len(self.generated_blocks)
 
     def load_actors(self):
         flushed_print("正在加载资产...")
@@ -82,16 +66,10 @@ class cycle_block(Base_Task):
             ([0.07, -0.15, block_z], "block2")
         ]
 
-        # 根据 Episode 编号或随机性决定生成的方块
-        if self.random_block_order:
-            block_index = np.random.randint(0, 3)
-        else:
-            block_index = self.ep_num % 3
+        block_index = 1
 
         self.selected_indices = [block_index, (block_index + 1) % 3]
-        flushed_print(f"模式: {'随机' if self.random_block_order else '顺序'} (索引: {block_index})")
 
-        self.generated_blocks = []
         self.blocks = {}
 
         colors = [
@@ -112,7 +90,6 @@ class cycle_block(Base_Task):
 
             block.set_mass(0.01)
             self.blocks[name] = [block, idx]
-            self.generated_blocks.append({"name": name, "position": pos, "index": int(idx)})
             flushed_print(f"已生成 {name} 位置: {pos} 颜色: {colors[i]}")
 
         self.empty_pad = (block_index + 2) % 3
@@ -132,7 +109,7 @@ class cycle_block(Base_Task):
         change_arm = False
 
         # 0 -> 1: arm_L
-        # 1 -> 2: nochange but default arm_L
+        # 1 -> 2: arm_R
         # 2 -> 0: arm_R
         self.arm_before = None
         arm_use = None
@@ -146,6 +123,7 @@ class cycle_block(Base_Task):
             grasp_dis=0.03
             MOVE_UP_AFTER_GRASP = 0.05
             robot_quat = [0.5, -0.5, 0.5, 0.5]
+            place_down_distance = 0.081
 
             for j in range(3):
                 # catch first block
@@ -153,8 +131,6 @@ class cycle_block(Base_Task):
                 self.arm_before = arm_use
                 if pos_id == 0:
                     arm_use = arm_L
-                elif pos_id == 1:
-                    arm_use = self.arm_before if self.arm_before is not None else arm_L
                 else:
                     arm_use = arm_R
                 if self.arm_before is not None and self.arm_before != arm_use:
@@ -178,11 +154,11 @@ class cycle_block(Base_Task):
                 
                 # place first block
                 target_pos_pre = self.pad_poses[self.empty_pad].copy()
-                target_pos_pre[2] += 0.2
+                target_pos_pre[2] += 0.25
                 flushed_print(f"DEBUG: 第 {i+1} 轮第 1 个方块第 {j+1} 次 放置 目标位置: {target_pos_pre}")
                 self.move(self.move_to_pose(arm_use, sapien.Pose(target_pos_pre, robot_quat)))
 
-                self.move(self.move_by_displacement(arm_use, z=-0.16))
+                self.move(self.move_by_displacement(arm_use, z=-place_down_distance))
                 self.move(self.open_gripper(arm_use))
                 self.move(self.move_by_displacement(arm_use, z=MOVE_UP_AFTER_GRASP))
                 # check place success
@@ -200,14 +176,12 @@ class cycle_block(Base_Task):
                 self.arm_before = arm_use
                 if pos_id == 0:
                     arm_use = arm_L
-                elif pos_id == 1:
-                    arm_use = self.arm_before if self.arm_before is not None else arm_L
                 else:
                     arm_use = arm_R
                 if self.arm_before is not None and self.arm_before != arm_use:
                     change_arm = True
                 start_block_pos = second_block.get_pose().p
-                self.move(self.grasp_actor(second_block, arm_tag=arm_use, pre_grasp_dis=pre_grasp_dis),
+                self.move(self.grasp_actor(second_block, arm_tag=arm_use, pre_grasp_dis=pre_grasp_dis, grasp_dis=grasp_dis),
                           self.back_to_origin(self.arm_before) if change_arm else None)
                 change_arm = False
                 self.move(self.move_by_displacement(arm_use, z=MOVE_UP_AFTER_GRASP))
@@ -225,10 +199,10 @@ class cycle_block(Base_Task):
 
                 # place second block
                 target_pos_pre = self.pad_poses[self.empty_pad].copy()
-                target_pos_pre[2] += 0.2
+                target_pos_pre[2] += 0.25
                 flushed_print(f"DEBUG: 第 {i+1} 轮第 2 个方块第 {j+1} 次 放置 目标位置: {target_pos_pre}")
                 self.move(self.move_to_pose(arm_use, sapien.Pose(target_pos_pre, robot_quat)))
-                self.move(self.move_by_displacement(arm_use, z=-0.16))
+                self.move(self.move_by_displacement(arm_use, z=-place_down_distance))
                 self.move(self.open_gripper(arm_use))
                 self.move(self.move_by_displacement(arm_use, z=MOVE_UP_AFTER_GRASP))
                 block_p = second_block.get_pose().p
