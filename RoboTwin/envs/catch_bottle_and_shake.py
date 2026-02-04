@@ -17,7 +17,7 @@ class catch_bottle_and_shake(Base_Task):
 
         self.info["info"] = {
             "task": "catch_bottle_and_shake",
-            "{A}": "bottle",
+            "{A}": "001_bottle/base11",
             "{B}": "table",
             "{a}": "left arm",
             "{b}": "right arm"

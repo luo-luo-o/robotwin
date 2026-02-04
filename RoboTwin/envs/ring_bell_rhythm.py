@@ -18,13 +18,15 @@ class ring_bell_rhythm(Base_Task):
 
         self.info["info"] = {
             "task": "ring_bell_rhythm",
+            "{a}": "right",
+            "{A}": "050_bell/base1"
         }
 
     def load_actors(self):
         flushed_print("正在加载资产...")
         base_table_height = 0.74
 
-        self.DELAY_BASE_TIME = 20
+        self.DELAY_BASE_TIME = 50
 
         # load bell
         self.config_bell = {
@@ -78,7 +80,7 @@ class ring_bell_rhythm(Base_Task):
         # stage 2: 长按
         flushed_print("阶段 2: 长按铃铛")
         self.move(self.move_by_displacement(arm_R, z=-move_down_distance))
-        self.delay(self.DELAY_BASE_TIME * 4)
+        self.delay(self.DELAY_BASE_TIME * 2.5)
         self.move(self.move_by_displacement(arm_R, z=move_down_distance))
         self.stage2_success = True
 

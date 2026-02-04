@@ -18,6 +18,13 @@ class stamp_seal_cycled(Base_Task):
 
         self.info["info"] = {
             "task": "stamp_seal_cycled",
+            "{A}": "pad_1",
+            "{B}": "pad_2",
+            "{C}": "pad_3",
+            "{D}": "pad_4",
+            "{E}": "pad_5",
+            "{F}": "pad_6",
+            "{a}": "right",
         }
 
     def load_actors(self):

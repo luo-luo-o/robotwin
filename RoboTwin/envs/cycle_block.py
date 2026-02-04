@@ -31,11 +31,11 @@ class cycle_block(Base_Task):
         self.info["info"] = {
             "task": "cycle_block",
             "random_block_order": self.random_block_order,
-            "A": "pad 0",
-            "B": "pad 1",
-            "C": "pad 2",
-            "a": "red block",
-            "b": "green block"
+            "{A}": "pad0",
+            "{B}": "pad1",
+            "{C}": "pad2",
+            "{a}": "left",
+            "{b}": "right",
         }
 
         if hasattr(self, 'generated_blocks'):
