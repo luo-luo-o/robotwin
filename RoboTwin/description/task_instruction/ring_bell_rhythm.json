@@ -1,0 +1,34 @@
+{
+    "full_description": "Use the right arm to press the bell in a rhythmic pattern of short-long-short clicks.",
+    "schema": "{A} notifies the bell, {a} notifies the right arm",
+    "preference": "num of words should not exceed 15. Degree of detail avg is six.",
+    "seen": [
+        "Use {a} to click {A} following a short-long-short rhythm sequence.",
+        "Perform a short, then long, then short press on {A} with {a}.",
+        "Press {A} using {a} with the specific short-long-short rhythmic timing.",
+        "Complete the rhythmic task by clicking {A} in short-long-short intervals.",
+        "Execute a rhythmic pattern of presses on {A} using the right arm {a}.",
+        "Use {a} to trigger {A} with one long press between two short ones.",
+        "Follow the rhythm of short-long-short to press {A} with {a}.",
+        "Grasp the timing to click {A} thrice in a short-long-short pattern.",
+        "Let {a} tap {A} briefly, then hold, then tap briefly again.",
+        "Perform three presses on {A} with {a} using the required rhythmic spacing.",
+        "Ring {A} with {a} by alternating short and long pressing durations.",
+        "Use {a} to execute the rhythmic clicks on {A} as demonstrated.",
+        "Apply short-long-short pressure to {A} with the right arm {a}.",
+        "Sequence the presses on {A} with {a} into a short-long-short rhythm.",
+        "Complete the bell ringing task on {A} with {a}'s rhythmic clicks.",
+        "Click {A} with {a} twice briefly with a long hold in between.",
+        "Use {a} to ring {A} following the specific duration-based rhythm.",
+        "Achieve the success signal by pressing {A} in a short-long-short rhythm.",
+        "Command {a} to press {A} with varying durations in the correct order.",
+        "Tap {A} with {a} using the rhythmic sequence of short-long-short."
+    ],
+    "unseen": [
+        "Follow the rhythmic sequence to press {A} with {a} three times.",
+        "Complete the short-long-short clicking pattern on {A} using {a}.",
+        "Use {a} to ring {A} in the specified rhythmic intervals.",
+        "Execute the three-step rhythmic press on {A} with the right arm.",
+        "Perform the rhythmic bell ringing on {A} using {a} for success."
+    ]
+}
